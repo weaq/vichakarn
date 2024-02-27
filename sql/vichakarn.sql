@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: 27 ก.พ. 2024 เมื่อ 10:18 AM
--- เวอร์ชันของเซิร์ฟเวอร์: 8.0.35-0ubuntu0.20.04.1
+-- Generation Time: 27 ก.พ. 2024 เมื่อ 02:43 PM
+-- เวอร์ชันของเซิร์ฟเวอร์: 8.0.36-0ubuntu0.20.04.1
 -- PHP Version: 7.4.3-4ubuntu2.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -31,18 +31,18 @@ SET time_zone = "+00:00";
 CREATE TABLE `groupsara` (
   `ID` bigint UNSIGNED NOT NULL,
   `group_id` bigint UNSIGNED DEFAULT NULL COMMENT 'รหัสกลุ่มสาระ',
-  `group_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'กลุ่มสาระ',
+  `group_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'กลุ่มสาระ',
   `group_status` bigint DEFAULT NULL COMMENT 'สถานะ',
   `activity_id` bigint UNSIGNED DEFAULT NULL COMMENT 'รหัสกิจกรรม',
-  `activity_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'ชื่อกิจกรรม',
+  `activity_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'ชื่อกิจกรรม',
   `class_id` bigint UNSIGNED DEFAULT NULL COMMENT 'รหัสระดับ',
-  `class_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'ชื่อระดับ',
+  `class_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'ชื่อระดับ',
   `student_no_min` bigint UNSIGNED DEFAULT NULL COMMENT 'จำนวนนักเรียนน้อยสุด',
   `student_no` bigint UNSIGNED DEFAULT NULL COMMENT 'จำนวนนักเรียน',
   `teacher_no` bigint UNSIGNED DEFAULT NULL COMMENT 'จำนวนผู้ควบคุม',
-  `location` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'สถานที่แข่งขัน',
-  `match_time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'เวลาการแข่งขัน',
-  `match_date` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'วันที่แข่งขัน'
+  `location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'สถานที่แข่งขัน',
+  `match_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'เวลาการแข่งขัน',
+  `match_date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'วันที่แข่งขัน'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -60,11 +60,11 @@ INSERT INTO `groupsara` (`ID`, `group_id`, `group_name`, `group_status`, `activi
 (8, 1, 'ภาษาไทย', 1, 8, 'โครงงาน', 3, 'ป.4-6', 3, 3, 2, '', '', ''),
 (9, 1, 'ภาษาไทย', 1, 9, 'โครงงาน', 4, 'ม.1-3', 3, 3, 2, '', '', ''),
 (10, 1, 'ภาษาไทย', 1, 10, 'โครงงาน', 5, 'ม.4-6', 3, 3, 2, '', '', ''),
-(11, 1, 'ภาษาไทย', 1, 11, 'สื่อนวัตกรรมครู ', 11, 'ครู', 1, 1, 1, '', '', ''),
+(11, 1, 'ภาษาไทย', 1, 11, 'สื่อนวัตกรรม', 11, 'ครู', 1, 1, 1, '', '', ''),
 (12, 2, 'คณิตศาสตร์', 1, 12, 'โครงงาน', 3, 'ป.4-6', 3, 3, 2, '', '', ''),
 (13, 2, 'คณิตศาสตร์', 1, 13, 'โครงงาน', 4, 'ม.1-3', 3, 3, 2, '', '', ''),
 (14, 2, 'คณิตศาสตร์', 1, 14, 'โครงงาน', 5, 'ม.4-6', 3, 3, 2, '', '', ''),
-(15, 2, 'คณิตศาสตร์', 1, 15, 'สื่อนวัตกรรมครู ', 11, 'ครู', 1, 1, 1, '', '', ''),
+(15, 2, 'คณิตศาสตร์', 1, 15, 'สื่อนวัตกรรม', 11, 'ครู', 1, 1, 1, '', '', ''),
 (16, 3, 'วิทยาศาสตร์และเทคโนโลยี ', 1, 16, 'โครงงาน', 3, 'ป.4-6', 3, 3, 2, '', '', ''),
 (17, 3, 'วิทยาศาสตร์และเทคโนโลยี ', 1, 17, 'โครงงาน', 4, 'ม.1-3', 3, 3, 2, '', '', ''),
 (18, 3, 'วิทยาศาสตร์และเทคโนโลยี ', 1, 18, 'โครงงาน', 5, 'ม.4-6', 3, 3, 2, '', '', ''),
@@ -74,21 +74,21 @@ INSERT INTO `groupsara` (`ID`, `group_id`, `group_name`, `group_status`, `activi
 (22, 3, 'วิทยาศาสตร์และเทคโนโลยี ', 1, 22, 'หุ่นยนต์', 3, 'ป.4-6', 4, 4, 3, '', '', ''),
 (23, 3, 'วิทยาศาสตร์และเทคโนโลยี ', 1, 23, 'หุ่นยนต์', 4, 'ม.1-3', 4, 4, 3, '', '', ''),
 (24, 3, 'วิทยาศาสตร์และเทคโนโลยี ', 1, 24, 'หุ่นยนต์', 5, 'ม.4-6', 4, 4, 3, '', '', ''),
-(25, 3, 'วิทยาศาสตร์และเทคโนโลยี ', 1, 25, 'สื่อนวัตกรรมครู', 11, 'ครู', 1, 1, 1, '', '', ''),
+(25, 3, 'วิทยาศาสตร์และเทคโนโลยี ', 1, 25, 'สื่อนวัตกรรม', 11, 'ครู', 1, 1, 1, '', '', ''),
 (26, 4, 'สังคมศึกษาศาสนา และวัฒนธรรม', 1, 26, 'โครงงาน', 3, 'ป.4-6', 3, 3, 2, '', '', ''),
 (27, 4, 'สังคมศึกษาศาสนา และวัฒนธรรม', 1, 27, 'โครงงาน', 4, 'ม.1-3', 3, 3, 2, '', '', ''),
 (28, 4, 'สังคมศึกษาศาสนา และวัฒนธรรม', 1, 28, 'โครงงาน', 5, 'ม.4-6', 3, 3, 2, '', '', ''),
 (29, 4, 'สังคมศึกษาศาสนา และวัฒนธรรม', 1, 29, 'ตอบปัญหาคุณธรรม', 3, 'ป.4-6', 1, 1, 1, '', '', ''),
 (30, 4, 'สังคมศึกษาศาสนา และวัฒนธรรม', 1, 30, 'ตอบปัญหาคุณธรรม', 4, 'ม.1-3', 1, 1, 1, '', '', ''),
-(31, 4, 'สังคมศึกษาศาสนา และวัฒนธรรม', 1, 31, 'สื่อนวัตกรรมครู', 11, 'ครู', 1, 1, 1, '', '', ''),
+(31, 4, 'สังคมศึกษาศาสนา และวัฒนธรรม', 1, 31, 'สื่อนวัตกรรม', 11, 'ครู', 1, 1, 1, '', '', ''),
 (32, 5, 'สุขศึกษา และพลศึกษา', 1, 32, 'โครงงาน', 3, 'ป.4-6', 3, 3, 2, '', '', ''),
 (33, 5, 'สุขศึกษา และพลศึกษา', 1, 33, 'โครงงาน', 4, 'ม.1-3', 3, 3, 2, '', '', ''),
 (34, 5, 'สุขศึกษา และพลศึกษา', 1, 34, 'โครงงาน', 5, 'ม.4-6', 3, 3, 2, '', '', ''),
-(35, 5, 'สุขศึกษา และพลศึกษา', 1, 35, 'สื่อนวัตกรรมครู', 11, 'ครู', 1, 1, 1, '', '', ''),
+(35, 5, 'สุขศึกษา และพลศึกษา', 1, 35, 'สื่อนวัตกรรม', 11, 'ครู', 1, 1, 1, '', '', ''),
 (36, 6, 'ศิลปะ', 1, 36, 'โครงงาน', 3, 'ป.4-6', 3, 3, 2, '', '', ''),
 (37, 6, 'ศิลปะ', 1, 37, 'โครงงาน', 4, 'ม.1-3', 3, 3, 2, '', '', ''),
 (38, 6, 'ศิลปะ', 1, 38, 'โครงงาน', 5, 'ม.4-6', 3, 3, 2, '', '', ''),
-(39, 6, 'ศิลปะ', 1, 39, 'สื่อนวัตกรรมครู', 11, 'ครู', 1, 1, 1, '', '', ''),
+(39, 6, 'ศิลปะ', 1, 39, 'สื่อนวัตกรรม', 11, 'ครู', 1, 1, 1, '', '', ''),
 (40, 6, 'ศิลปะ', 1, 40, 'ร้องเพลงพระราชนิพนธ์', 3, 'ป.4-6', 6, 9, 3, '', '', ''),
 (41, 6, 'ศิลปะ', 1, 41, 'ร้องเพลงพระราชนิพนธ์', 4, 'ม.1-3', 6, 10, 3, '', '', ''),
 (42, 6, 'ศิลปะ', 1, 42, 'ร้องเพลงพระราชนิพนธ์', 5, 'ม.4-6', 6, 11, 3, '', '', ''),
@@ -118,7 +118,7 @@ INSERT INTO `groupsara` (`ID`, `group_id`, `group_name`, `group_status`, `activi
 (66, 7, 'การงานอาชีพ', 1, 66, 'ประดิษฐ์ของจากวัสดุเหลือใช้', 4, 'ม.1-3', 3, 3, 2, '', '', ''),
 (67, 7, 'การงานอาชีพ', 1, 67, 'ประดิษฐ์ของจากวัสดุเหลือใช้', 5, 'ม.4-6', 3, 3, 2, '', '', ''),
 (68, 7, 'การงานอาชีพ', 1, 68, 'จัดสวนถาดแห้ง ไม่กำหนดช่วงชั้น', 11, 'ครู', 4, 4, 3, '', '', ''),
-(69, 7, 'การงานอาชีพ', 1, 69, 'สื่อนวัตกรรมครู', 11, 'ครู', 1, 1, 1, '', '', ''),
+(69, 7, 'การงานอาชีพ', 1, 69, 'สื่อนวัตกรรม', 11, 'ครู', 1, 1, 1, '', '', ''),
 (70, 8, 'ภาษาต่างประเทศ', 1, 70, 'กล่าวสุนทรพจน์ภาษาอังกฤษ', 3, 'ป.4-6', 3, 3, 2, '', '', ''),
 (71, 8, 'ภาษาต่างประเทศ', 1, 71, 'กล่าวสุนทรพจน์ภาษาอังกฤษ', 4, 'ม.1-3', 3, 3, 2, '', '', ''),
 (72, 8, 'ภาษาต่างประเทศ', 1, 72, 'กล่าวสุนทรพจน์ภาษาอังกฤษ', 5, 'ม.4-6', 3, 3, 2, '', '', ''),
@@ -146,8 +146,8 @@ INSERT INTO `groupsara` (`ID`, `group_id`, `group_name`, `group_status`, `activi
 (94, 9, 'ปฐมวัย', 1, 94, 'เริงเล่นเต้นแดนเซอร์', 1, 'อายุ 4-6 ปี', 10, 10, 5, '', '', ''),
 (95, 9, 'ปฐมวัย', 1, 95, 'ต่อตัวเสริมทักษะ', 1, 'อายุ 4-6 ปี', 3, 3, 2, '', '', ''),
 (96, 9, 'ปฐมวัย', 1, 96, 'ฮูลาฮูป ประกอบเพลง', 1, 'อายุ 4-6 ปี', 10, 10, 5, '', '', ''),
-(97, 9, 'ปฐมวัย', 1, 97, 'สื่อนวัตกรรมครู', 11, 'ครู', 1, 1, 1, '', '', ''),
-(98, 10, 'ศูนย์พัฒนาเด็กเล็ก', 1, 98, 'สื่อนวัตกรรมครู', 11, 'ครู', 1, 1, 1, '', '', '');
+(97, 9, 'ปฐมวัย', 1, 97, 'สื่อนวัตกรรม', 11, 'ครู', 1, 1, 1, '', '', ''),
+(98, 10, 'ศูนย์พัฒนาเด็กเล็ก', 1, 98, 'สื่อนวัตกรรม', 11, 'ครู', 1, 1, 1, '', '', '');
 
 -- --------------------------------------------------------
 
@@ -160,9 +160,9 @@ CREATE TABLE `staff` (
   `user` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `passwd` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `tel` varchar(20) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `email` varchar(50) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `last_login` varchar(30) COLLATE utf8mb3_unicode_ci DEFAULT NULL
+  `tel` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `email` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `last_login` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
@@ -170,7 +170,53 @@ CREATE TABLE `staff` (
 --
 
 INSERT INTO `staff` (`id`, `user`, `passwd`, `name`, `tel`, `email`, `last_login`) VALUES
-(1, '03410102', 'd0970714757783e6cf17b26fb8e2298f', 'เทศบาลนครอุดรธานี', '042 325178', 'admin@udoncity.go.th', '2024-02-26 08:33:27');
+(1, '03410102', 'd0970714757783e6cf17b26fb8e2298f', 'เทศบาลนครอุดรธานี', '042 325178', 'admin@udoncity.go.th', '2024-02-27 13:54:13');
+
+-- --------------------------------------------------------
+
+--
+-- โครงสร้างตาราง `studentreg`
+--
+
+CREATE TABLE `studentreg` (
+  `ID` int NOT NULL,
+  `reg_id` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `school_id` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'รหัสโรงเรียน10หลัก',
+  `go_id` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'รหัสหน่วยงานต้นสังกัด',
+  `groupsara_id` int NOT NULL COMMENT 'ID tbl wp_groupsara',
+  `activity_id` int NOT NULL COMMENT 'รหัสกิจกรรม',
+  `class_id` int NOT NULL COMMENT 'รหัสระดับ',
+  `reg_status` int DEFAULT NULL COMMENT 'สถานะสมัคร',
+  `student_prefix` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'คำนำหน้า',
+  `student_firstname` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'ชื่อ',
+  `student_lastname` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'นามสกุล',
+  `display_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `student_image` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'รูปภาพ',
+  `tel` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- โครงสร้างตาราง `teacherreg`
+--
+
+CREATE TABLE `teacherreg` (
+  `ID` int UNSIGNED NOT NULL,
+  `reg_id` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `school_id` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'รหัสโรงเรียน10หลัก',
+  `go_id` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'รหัสหน่วยงานต้นสังกัด',
+  `groupsara_id` int NOT NULL,
+  `activity_id` int NOT NULL COMMENT 'รหัสกิจกรรม',
+  `class_id` int NOT NULL COMMENT 'รหัสระดับ',
+  `reg_status` int DEFAULT NULL COMMENT 'สถานะสมัคร',
+  `teacher_prefix` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'คำนำหน้า',
+  `teacher_firstname` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'ชื่อ',
+  `teacher_lastname` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'นามสกุล',
+  `display_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `teacher_image` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'รูปภาพ',
+  `tel` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'โทร.'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Indexes for dumped tables
@@ -189,6 +235,21 @@ ALTER TABLE `staff`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `studentreg`
+--
+ALTER TABLE `studentreg`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `teacherreg`
+--
+ALTER TABLE `teacherreg`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `school_id` (`school_id`),
+  ADD KEY `activity_id` (`activity_id`),
+  ADD KEY `class_id` (`class_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -203,6 +264,18 @@ ALTER TABLE `groupsara`
 --
 ALTER TABLE `staff`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `studentreg`
+--
+ALTER TABLE `studentreg`
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `teacherreg`
+--
+ALTER TABLE `teacherreg`
+  MODIFY `ID` int UNSIGNED NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

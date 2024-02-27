@@ -1,6 +1,11 @@
-<?php 
+<?php
+session_start();
 include("header.php");
 include("dbconnect.php");
+
+
+//$domain = 'http://127.0.0.1/wordpress/';
+$domain = '/';
 ?>
 
 <?php if (isset($_GET['success'])) : ?>
@@ -19,29 +24,36 @@ include("dbconnect.php");
     <div class="alert alert-success text-center">
 
         <?php
-        if ($_GET['sID'] && isset($_GET['rm'])) {
+        if ($_GET['sID'] && $_SESSION['sess_user'] && isset($_GET['rm'])) {
 
             $error_delete = 1;
 
-            $sql = "SELECT ID, activity_id, activity_name, group_status, class_id, class_name, student_no, teacher_no FROM wp_groupsara WHERE ID = '" . $_GET['sID'] . "' ORDER BY activity_name ASC ";
-            $result=mysqli_query($conn, $sql) or die("error : " . $sql );
+            $sql = "SELECT ID, activity_id, activity_name, group_status, class_id, class_name, student_no, teacher_no FROM groupsara WHERE ID = '" . $_GET['sID'] . "' ORDER BY activity_name ASC ";
+            $tmp_result = mysqli_query($conn, $sql);
+            $groupsara = [];
+            if (mysqli_num_rows($tmp_result) > 0) {
+                // output data of each row
+                while ($row = mysqli_fetch_assoc($tmp_result)) {
+                    $groupsara[] = $row;
+                }
+            }
 
-            $sql = "DELETE FROM wp_studentreg WHERE school_id = current_user AND groupsara_id = {$_GET['sID']} ";
-            if ($wpdb->query($sql)) {
+            $sql = "DELETE FROM studentreg WHERE school_id = {$_SESSION['sess_user']} AND groupsara_id = {$_GET['sID']} ";
+            if (mysqli_query($conn, $sql)) {
                 $error_delete = 0;
             } else {
                 $error_delete = 1;
             }
 
-            $sql = "DELETE FROM wp_teacherreg WHERE school_id = current_user AND groupsara_id = {$_GET['sID']} ";
-            if ($wpdb->query($sql)) {
+            $sql = "DELETE FROM teacherreg WHERE school_id = {$_SESSION['sess_user']} AND groupsara_id = {$_GET['sID']} ";
+            if (mysqli_query($conn, $sql)) {
                 $error_delete = 0;
             } else {
                 $error_delete = 1;
             }
 
             if ($error_delete ==  0) {
-                echo '<div class="h3">ยกเลิกการสมัคร ' . $wp_groupsara[0]['activity_name'] . ' ' . $wp_groupsara[0]['class_name'] . ' เรียบร้อยแล้ว</div>';
+                echo '<div class="h3">ยกเลิกการสมัคร ' . $groupsara[0]['activity_name'] . ' ' . $groupsara[0]['class_name'] . ' เรียบร้อยแล้ว</div>';
             }
         }
         ?>
@@ -49,50 +61,80 @@ include("dbconnect.php");
     </div>
 <?php endif; ?>
 
-<form name="contact_form" method="POST" action="" enctype="multipart/form-data" autocomplete="on" accept-charset="utf-8">
+<form name="contact_form" method="POST" action="regis-form-process.php" enctype="multipart/form-data" autocomplete="on" accept-charset="utf-8">
 
     <?php
-    $current_user = "3041200102";
+    $current_user = get_current_user();
     $output = "";
 
-    if ($_GET['sID']) {
+    if ($_GET['sID'] && $_SESSION['sess_user'] && empty($_GET['rm'])) {
 
-        $sql = "SELECT * FROM wp_schools WHERE school_id = {$current_user} ";
-        echo $sql;
-        $wp_schools = mysqli_query($conn, $sql);
+        $sql = "SELECT * FROM schools WHERE school_id = {$_SESSION['sess_user']}";
+        $tmp_result = mysqli_query($conn, $sql);
+        $schools = [];
+        if (mysqli_num_rows($tmp_result) > 0) {
+            // output data of each row
+            while ($row = mysqli_fetch_assoc($tmp_result)) {
+                $schools[] = $row;
+            }
+        }
 
         $sql = "SELECT ID, activity_id, activity_name, group_status, class_id, class_name, student_no, teacher_no FROM groupsara WHERE ID = '" . $_GET['sID'] . "' ORDER BY activity_name ASC ";
-        $wp_groupsara = mysqli_query($conn, $sql);
+        $tmp_result = mysqli_query($conn, $sql);
+        $groupsara = [];
+        if (mysqli_num_rows($tmp_result) > 0) {
+            // output data of each row
+            while ($row = mysqli_fetch_assoc($tmp_result)) {
+                $groupsara[] = $row;
+            }
+        }
 
-        $sql = "SELECT * FROM wp_studentreg WHERE school_id = current_user AND groupsara_id = {$_GET['sID']} ";
-        $student_reg_chk = mysqli_query($conn, $sql);
+        $sql = "SELECT * FROM studentreg WHERE school_id = {$_SESSION['sess_user']} AND groupsara_id = {$_GET['sID']} ";
+        $tmp_result = mysqli_query($conn, $sql);
+        $student_reg_chk = [];
+        if (mysqli_num_rows($tmp_result) > 0) {
+            // output data of each row
+            while ($row = mysqli_fetch_assoc($tmp_result)) {
+                $student_reg_chk[] = $row;
+            }
+        }
 
-        $sql = "SELECT * FROM wp_teacherreg WHERE school_id = current_user AND groupsara_id = {$_GET['sID']} ";
-        $teacher_reg_chk = mysqli_query($conn, $sql);
+        $sql = "SELECT * FROM teacherreg WHERE school_id = {$_SESSION['sess_user']} AND groupsara_id = {$_GET['sID']} ";
+        $tmp_result = mysqli_query($conn, $sql);
+        $teacher_reg_chk = [];
+        if (mysqli_num_rows($tmp_result) > 0) {
+            // output data of each row
+            while ($row = mysqli_fetch_assoc($tmp_result)) {
+                $teacher_reg_chk[] = $row;
+            }
+        }
 
-        include("config.php");
-
-        $tmp_col = ($wp_groupsara[0]['class_id'] == "11") ? "col-md-3" : "col-md-4";
+        $tmp_col = ($groupsara[0]['class_id'] == "11") ? "col-md-3" : "col-md-4";
 
         $output = '
 		<div class="container my-3">
-            <div class="fs-4">' . $wp_schools[0]['school_name'] . '</div>
-            <div class="fs-4 fw-bold">ลงทะเบียน' . $arr_group_status[$wp_groupsara[0]['group_status']]['name'] . '<br/>' . $wp_groupsara[0]['activity_name'] . ' '  . $wp_groupsara[0]['class_name'] . ' '  . '</div>
+            <div class="h4">' . $schools[0]['school_name'] . '</div>
+            <div class="h4 font-weight-bold">ลงทะเบียนกิจกรรม ' . $groupsara[0]['activity_name'] . ' '  . $groupsara[0]['class_name'] . ' '  . '</div>
 
+            <div class="h5 font-weight-bold text-center mt-2">ชื่อโรงเรียนตัวแทน</div>
+            <div class="form-group">
+                <label for="school_name" >โรงเรียน:</label>
+                <input type="text" class="form-control" id="school_name" name="school_name">
+            </div>
 
-			<div class="fs-5 fw-bold text-center mt-2">ชื่อผู้แข่งขัน</div>
+			<div class="h5 font-weight-bold text-center mt-2">ชื่อผู้แข่งขัน</div>
 		';
 
-        for ($i = 0; $i < $wp_groupsara[0]['student_no']; $i++) {
+        for ($i = 0; $i < $groupsara[0]['student_no']; $i++) {
             $tmp_num = $i + 1;
 
             $img_url = './img-upload/student_img/' . $student_reg_chk[$i]['ID'] . '.jpg';
 
-            $img_url = (file_exists($img_url)) ? $domain . 'img-upload/student_img/' . $student_reg_chk[$i]['ID'] . '.jpg' : $domain . 'img-upload/unknow.jpg';
+            $img_url = (file_exists($img_url)) ? 'img-upload/student_img/' . $student_reg_chk[$i]['ID'] . '.jpg' : 'img-upload/unknow.jpg';
 
             $output .= '
             <div class="border px-3 py-3 my-3">
-                <div class="fw-bold">ผู้แข่งขัน คนที่ ' . $tmp_num . '</div>
+                <div class="font-weight-bold">ผู้แข่งขัน คนที่ ' . $tmp_num . '</div>
                 <div class="row">
                 <div class="col-md-10">
                     <div class="row">
@@ -110,7 +152,7 @@ include("dbconnect.php");
                         </div>
                         ';
 
-            if ($wp_groupsara[0]['class_id'] == "11") {
+            if ($groupsara[0]['class_id'] == "11") {
                 $output .= '
                         <div class="mt-2 col-md-3">
                             <label class="form-label">หมายเลขโทรศัพท์</label>
@@ -122,11 +164,12 @@ include("dbconnect.php");
             $output .= '
                     </div>
                     <div class="row">
-                        <div class="input-group mt-2">
-                            <input type="file" class="form-control" id="student_img[' . $i . ']" name="student_img[' . $i . ']">
-                            <label class="input-group-text" for="student_img[' . $i . ']">เลือกรูปถ่าย</label>
+                        <div class="custom-file mt-2 mx-3">
+                            <input type="file" class="custom-file-input" id="student_img[' . $i . ']" name="student_img[' . $i . ']">
+                            <label class="custom-file-label" for="student_img[' . $i . ']">เลือกรูปถ่าย</label>
                         </div>
                     </div>
+
                 </div>
                 <div class="col-md-2">
                     <img src="' . $img_url . '" class="rounded img-fluid" >
@@ -137,19 +180,19 @@ include("dbconnect.php");
         }
 
 
-        if ($wp_groupsara[0]['class_id'] != "11") {
+        if ($groupsara[0]['class_id'] != "11") {
             $output .= '
-			<div class="fs-5 fw-bold text-center mt-3">ชื่อผู้ควบคุม</div>
+			<div class="h5 font-weight-bold text-center mt-3">ชื่อผู้ควบคุม</div>
 			';
-            for ($i = 0; $i < $wp_groupsara[0]['teacher_no']; $i++) {
+            for ($i = 0; $i < $groupsara[0]['teacher_no']; $i++) {
                 $tmp_num = $i + 1;
                 $img_url = './img-upload/coach_img/' . $teacher_reg_chk[$i]['ID'] . '.jpg';
 
-                $img_url = (file_exists($img_url)) ? $domain . 'img-upload/coach_img/' . $teacher_reg_chk[$i]['ID'] . '.jpg' : $domain . 'img-upload/unknow.jpg';
+                $img_url = (file_exists($img_url)) ? 'img-upload/coach_img/' . $teacher_reg_chk[$i]['ID'] . '.jpg' : 'img-upload/unknow.jpg';
 
                 $output .= '
             <div class="border px-3 py-3 my-3">
-			<div class="fw-bold">ผู้ควบคุม คนที่ ' . $tmp_num . '</div>
+			<div class="font-weight-bold">ผู้ควบคุม คนที่ ' . $tmp_num . '</div>
                 <div class="row">
                     <div class="col-md-10">
                         <div class="row">
@@ -171,9 +214,9 @@ include("dbconnect.php");
                             </div>
                         </div>
                         <div class="row">
-                            <div class="input-group mt-2 mb-2">
-                                <input type="file" class="form-control" id="coach_img[' . $i . ']" name="coach_img[' . $i . ']">
-                                <label class="input-group-text" for="coach_img[' . $i . ']">เลือกรูปถ่าย</label>
+                            <div class="custom-file mt-2 mx-3">
+                                <input type="file" class="custom-file-input" id="coach_img[' . $i . ']" name="coach_img[' . $i . ']">
+                                <label class="custom-file-label" for="coach_img[' . $i . ']">เลือกรูปถ่าย</label>
                             </div>
                         </div>
 
@@ -190,19 +233,21 @@ include("dbconnect.php");
 
         $output .= '
         <div class="mt-3 mb-3 text-center">
-            <input type="hidden" id="school_id" name="school_id" value="' . $current_user . '">
-            <input type="hidden" id="go_id" name="go_id" value="' . $wp_schools[0]['go_id'] . '">
-            <input type="hidden" id="groupsara_id" name="groupsara_id" value="' . $wp_groupsara[0]['ID'] . '">
-            <input type="hidden" id="activity_id" name="activity_id" value="' . $wp_groupsara[0]['activity_id'] . '">
-            <input type="hidden" id="class_id" name="class_id" value="' . $wp_groupsara[0]['class_id'] . '">
+            <input type="hidden" id="school_id" name="school_id" value="' . $_SESSION['sess_user'] . '">
+            <input type="hidden" id="go_id" name="go_id" value="' . $schools[0]['go_id'] . '">
+            <input type="hidden" id="groupsara_id" name="groupsara_id" value="' . $groupsara[0]['ID'] . '">
+            <input type="hidden" id="activity_id" name="activity_id" value="' . $groupsara[0]['activity_id'] . '">
+            <input type="hidden" id="class_id" name="class_id" value="' . $groupsara[0]['class_id'] . '">
 
+            <input type="hidden" name="action" value="contact_form">
+            <input type="hidden" name="base_page" value="' . basename($_SERVER['REQUEST_URI']) . '">
 
             <div class="row">
                 <div class="col-md-6 text-center">
                     <div class="btn btn-warning mx-3 my-3" onclick="js_remove_record()">ยกเลิกการลงทะเบียน</div>
                 </div>
                 <div class="col-md-6 text-center">
-                    <button type="submit" class="btn btn-primary mx-3 my-3">บันทึกข้อมูล</button>
+                    <button type="submit" id="submit" name="submit" class="btn btn-primary mx-3 my-3">บันทึกข้อมูล</button>
                 </div>
             </div>
         </div>
@@ -215,4 +260,20 @@ include("dbconnect.php");
 
 </form>
 
-<?php include("footer.php"); ?>
+
+<script>
+		function js_remove_record() {
+			let text = "คุณแน่ใจหรือว่าต้องการ ลบข้อมูล ?";
+			if (confirm(text) == true) {
+				window.location = '<?php echo "?sID=" . $_GET['sID'] . "&rm=1"; ?>'
+			} else {
+				text = "ยกเลิกการลบข้อมูล";
+			}
+		}
+	</script>
+
+<?php
+
+include("footer.php");
+
+?>
