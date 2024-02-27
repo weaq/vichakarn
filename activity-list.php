@@ -1,7 +1,11 @@
 <?php
 session_start();
-include("header.php");
-include("dbconnect.php");
+include "login-chk.php";
+$current_user = get_user_detail();
+
+include "dbconnect.php";
+include "header.php";
+
 ?>
 
 <div class="container mt-3 mb-5">
@@ -9,7 +13,7 @@ include("dbconnect.php");
 	// group
 	$sql = "SELECT DISTINCT(group_id) as group_id, group_name FROM groupsara ORDER BY group_id ASC";
 	$result = mysqli_query($conn, $sql);
-
+	echo '<div class="h4">รายการแข่งขันทักษะวิชาการ</div>';
 	echo '<div class="form-group">';
 	echo '<label for="sel1">กลุ่มสาระการเรียนรู้:</label>';
 	echo '<select class="form-control" name="group" onchange="location = this.value;">';
@@ -47,7 +51,6 @@ include("dbconnect.php");
 			}
 		}
 
-
 		
 		$sql = "SELECT COUNT(activity_name) as count_activity_name, activity_name FROM groupsara WHERE group_id = '{$_GET['group_id']}' GROUP BY activity_name ORDER BY `groupsara`.`activity_name` ASC";
 		$tmp_result = mysqli_query($conn, $sql);
@@ -83,18 +86,17 @@ include("dbconnect.php");
 			<tbody>
 
 				<?php
-
-				foreach ($arr_activity_name as $row) {
+				foreach ($arr_activity_name as $row_activity_name) {
 					echo '<tr>';
-					echo '<td>' . $row['activity_name'] . '</td>';
+					echo '<td>' . $row_activity_name['activity_name'] . '</td>';
 
 					$txt_activity_type = "";
 
 					foreach ($arr_class as $value) {
 
-						if (!empty($_SESSION['sess_user'])) {
+						if ($current_user['is_login']) {
 
-							$sql = "SELECT * FROM groupsara WHERE activity_name LIKE '%{$row['activity_name']}%' AND class_id = '{$value['class_id']}' AND group_id = '{$_GET['group_id']}' ";
+							$sql = "SELECT * FROM groupsara WHERE activity_name LIKE '%{$row_activity_name['activity_name']}%' AND class_id = '{$value['class_id']}' AND group_id = '{$_GET['group_id']}' ";
 							$tmp_result = mysqli_query($conn, $sql);
 							$result_activity = [];
 							if (mysqli_num_rows($tmp_result) > 0) {
@@ -104,12 +106,10 @@ include("dbconnect.php");
 								}
 							}
 
-
-
 							if ($result_activity[0]['student_no']) {
 
 
-								$sql = "SELECT COUNT(id) as cid FROM `studentreg` WHERE groupsara_id = '{$result_activity[0]['ID']}' AND school_id = '{$current_user->user_login}' ";
+								$sql = "SELECT COUNT(id) as cid FROM `studentreg` WHERE groupsara_id = '{$result_activity[0]['ID']}' AND school_id = '{$current_user['user_login']}' ";
 								$tmp_result = mysqli_query($conn, $sql);
 								$result_count_student = [];
 								if (mysqli_num_rows($tmp_result) > 0) {
@@ -120,7 +120,7 @@ include("dbconnect.php");
 								}
 
 
-								$sql = "SELECT COUNT(id) as cid FROM `teacherreg` WHERE groupsara_id = '{$result_activity[0]['ID']}' AND school_id = '{$current_user->user_login}' ";
+								$sql = "SELECT COUNT(id) as cid FROM `teacherreg` WHERE groupsara_id = '{$result_activity[0]['ID']}' AND school_id = '{$current_user['user_login']}' ";
 								$tmp_result = mysqli_query($conn, $sql);
 								$result_count_teacher = [];
 								if (mysqli_num_rows($tmp_result) > 0) {
@@ -153,7 +153,7 @@ include("dbconnect.php");
 							}
 						} else {
 							// not login 
-							$sql = "SELECT * FROM groupsara WHERE activity_name LIKE '%{$row['activity_name']}%' AND class_id = '{$value['class_id']}' AND group_id = '{$_GET['group_id']}' ";
+							$sql = "SELECT * FROM groupsara WHERE activity_name LIKE '%{$row_activity_name['activity_name']}%' AND class_id = '{$value['class_id']}' AND group_id = '{$_GET['group_id']}' ";
 							$tmp_result = mysqli_query($conn, $sql);
 							$result_activity = [];
 							if (mysqli_num_rows($tmp_result) > 0) {
@@ -162,7 +162,6 @@ include("dbconnect.php");
 									$result_activity[] = $row;
 								}
 							}
-
 
 
 							if ($result_activity[0]['student_no']) {
@@ -190,6 +189,7 @@ include("dbconnect.php");
 								echo '<td class="bg-secondary">&nbsp;</td>';
 							}
 						}
+
 
 						if ($result_activity[0]['student_no'] == 1) {
 							$txt_activity_type = "เดี่ยว";
@@ -228,5 +228,5 @@ include("dbconnect.php");
 </div>
 
 <?php
-include("footer.php");
+include "footer.php";
 ?>

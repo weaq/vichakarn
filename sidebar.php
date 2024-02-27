@@ -6,34 +6,26 @@
         </button>
     </div>
     <div class="p-4 pt-5">
-        <h1><a href="index.php" class="h3 text-white">งานวิชาการ</a></h1>
-        <div>
-            <?php
-            echo $_SESSION['sess_user'];
-            ?>
-        </div>
+        <div class="h4"><a href="index.php" class="text-white">การประกวดแข่งขันทักษะทางวิชาการ</a></div>
+        <div class="h6">ระดับภาคตะวันออกเฉียงเหนือ ครั้งที่ 29</div>
+        <hr />
+
         <ul class="list-unstyled components mb-5">
             <li class="active">
                 <a href="#pageSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">จัดการข้อมูล</a>
                 <ul class="collapse list-unstyled" id="pageSubmenu1">
                     <li>
-                        <a href="admin-detail.php">ข้อมูลพื้นฐาน อปท.</a>
-                    </li>
-                    <li>
                         <a href="activity-list.php">รายการแข่งขันทักษะวิชาการ</a>
                     </li>
                     <li>
-                        <a href="#">โรงเรียนที่เป็นตัวแทน</a>
+                        <a href="#">สถานศึกษาที่เป็นตัวแทน</a>
                     </li>
                     <li>
-                        <a href="select-activity.php">กิจกรรมแต่ละโรงเรียน</a>
+                        <a href="select-activity.php">กิจกรรมแต่ละสถานศึกษา</a>
                     </li>
-                    
+
                     <li>
-                        <a href="#">พิมพ์รายชื่อโรงเรียนทั้งหมด</a>
-                    </li>
-                    <li>
-                        <a href="#">พิมพ์ชื่อผู้ใช้และรหัสผ่าน</a>
+                        <a href="#">พิมพ์รายชื่อสถานศึกษาทั้งหมด</a>
                     </li>
                 </ul>
             </li>
@@ -41,13 +33,10 @@
                 <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">ตรวจสอบข้อมูล</a>
                 <ul class="collapse list-unstyled" id="pageSubmenu2">
                     <li>
-                        <a href="#">รายชื่อ ร.ร. ที่ลงทะเบียนไม่ครบ</a>
+                        <a href="#">รายชื่อสถานศึกษาที่ลงทะเบียนไม่ครบ</a>
                     </li>
                     <li>
-                        <a href="#">ความครบถ้วนของจำนวนนักเรียน</a>
-                    </li>
-                    <li>
-                        <a href="#">รายการที่ส่งมากกว่า 1 โรงเรียน</a>
+                        <a href="#">ความครบถ้วนของจำนวนผู้แข่งขัน</a>
                     </li>
                     <li>
                         <a href="#">สรุปผลการลงทะเบียน</a>
@@ -61,7 +50,7 @@
                         <a href="#">ผลการแข่งขัน</a>
                     </li>
                     <li>
-                        <a href="#">จำนวนนักเรียนที่เป็นตัวแทน</a>
+                        <a href="#">จำนวนผู้แข่งขัน</a>
                     </li>
                     <li>
                         <a href="#">สรุปอันดับรางวัล</a>
@@ -69,9 +58,26 @@
                 </ul>
             </li>
             <li>
-                <a href="logout.php">ออกจากระบบ</a>
+                <a href="#">หลักเกณฑ์การแข่งขัน</a>
             </li>
         </ul>
+        <div class="mb-5">
+            <div>
+                <?php
+                echo $current_user['is_login'] ? 'ผู้ใช้งาน :' . '<br>' . $current_user['user_name'] : '';
+                ?>
+            </div>
+            <ul class="list-unstyled components mb-5">
+                <li>
+                    <a href="admin-detail.php">ข้อมูลพื้นฐาน</a>
+                </li>
+                <li>
+                    <?php
+                    echo ($current_user['is_login']) ? '<a href="logout.php">ออกจากระบบ</a>' : '<a href="login-form.php">เข้าระบบ</a>';
+                    ?>
+                </li>
+            </ul>
+        </div>
         <!--
         <div class="mb-5">
             <h3 class="h6">Subscribe for newsletter</h3>

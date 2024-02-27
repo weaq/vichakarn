@@ -27,3 +27,12 @@
         <?php include("sidebar.php"); ?>
 
         <div id="content" class="p-4 p-md-5 pt-5">
+            <div class="mb-3">
+                <div class="h3">
+                    การประกวดแข่งขันทักษะทางวิชาการ
+                </div>
+                <div class="h5">
+                    การจัดงานมหกรรมการศึกษาท้องถิ่น ระดับภาคตะวันออกเฉียงเหนือ ครั้งที่ 29
+                </div>
+                <hr>
+            </div>

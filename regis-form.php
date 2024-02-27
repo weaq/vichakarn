@@ -1,8 +1,15 @@
 <?php
 session_start();
-include("header.php");
-include("dbconnect.php");
+include "login-chk.php";
+$current_user = get_user_detail();
 
+if (!$current_user['is_login']) {
+    echo "<META HTTP-EQUIV=Refresh content=0;URL=login-form.php?ref=" . $_SERVER['PHP_SELF'] . ">";
+    exit();
+}
+
+include "dbconnect.php";
+include "header.php";
 
 //$domain = 'http://127.0.0.1/wordpress/';
 $domain = '/';
@@ -116,10 +123,10 @@ $domain = '/';
             <div class="h4">' . $schools[0]['school_name'] . '</div>
             <div class="h4 font-weight-bold">ลงทะเบียนกิจกรรม ' . $groupsara[0]['activity_name'] . ' '  . $groupsara[0]['class_name'] . ' '  . '</div>
 
-            <div class="h5 font-weight-bold text-center mt-2">ชื่อโรงเรียนตัวแทน</div>
+            <div class="h5 font-weight-bold text-center mt-2">สถานศึกษาที่เป็นตัวแทน</div>
             <div class="form-group">
-                <label for="school_name" >โรงเรียน:</label>
-                <input type="text" class="form-control" id="school_name" name="school_name">
+                <label for="school_name" >ชื่อสถานศึกษา:</label>
+                <input type="text" class="form-control" id="school_name" name="school_name" required >
             </div>
 
 			<div class="h5 font-weight-bold text-center mt-2">ชื่อผู้แข่งขัน</div>
@@ -274,6 +281,6 @@ $domain = '/';
 
 <?php
 
-include("footer.php");
+include "footer.php";
 
 ?>

@@ -1,6 +1,13 @@
 <?php
 session_start();
 include "login-chk.php";
+$current_user = get_user_detail();
+
+if (!$current_user['is_login']) {
+    echo "<META HTTP-EQUIV=Refresh content=0;URL=login-form.php?ref=" . $_SERVER['PHP_SELF'] . ">";
+    exit();
+}
+
 ?>
 <?php
 include "dbconnect.php";
@@ -13,7 +20,7 @@ if (isset($_REQUEST['submit'])) {
 
     //print_r($_REQUEST);
 
-    if (!empty($_REQUEST['oldpasswd']) OR !empty($_REQUEST['newpasswd']) OR !empty($_REQUEST['confnewpasswd'])) {
+    if (!empty($_REQUEST['oldpasswd']) or !empty($_REQUEST['newpasswd']) or !empty($_REQUEST['confnewpasswd'])) {
         if ($_REQUEST['newpasswd'] != $_REQUEST['confnewpasswd']) {
             $error = 'โปรด ตั้งค่ารหัสผ่านใหม่ ให้ตรงกับ ยืนยันรหัสผ่านใหม่';
         } else if (strlen($_REQUEST['newpasswd']) < 6) {
@@ -25,7 +32,7 @@ if (isset($_REQUEST['submit'])) {
 
             if (mysqli_num_rows($result) > 0) {
                 $sql .= ", passwd = '" . md5($_REQUEST['newpasswd']) . "' ";
-                $set_session_password = 1 ;
+                $set_session_password = 1;
             } else {
                 $error = 'รหัสผ่านเดิมไม่ถูกต้อง';
             }
@@ -40,7 +47,6 @@ if (isset($_REQUEST['submit'])) {
             $_SESSION['sess_passwd'] = md5($_POST['newpasswd']);
         }
     }
-
 }
 
 $sql = "SELECT * FROM `staff` WHERE `user` LIKE '" . $_SESSION['sess_user'] . "' AND `passwd` LIKE '" . $_SESSION['sess_passwd'] . "' LIMIT 1";
@@ -56,7 +62,7 @@ if (mysqli_num_rows($result) > 0) {
 }
 ?>
 
-<?php include("header.php"); ?>
+<?php include "header.php"; ?>
 
 <div class="mb-4 h4"><?php echo $name; ?></div>
 <form method="post" action="" autocomplete="off">
@@ -67,13 +73,13 @@ if (mysqli_num_rows($result) > 0) {
     </div>
 
     <?php if ($error) { ?>
-    <div class="form-row">
-        <div class="form-group col-md-12 text-warning">
-            <?php
+        <div class="form-row">
+            <div class="form-group col-md-12 text-warning">
+                <?php
                 echo $error;
-            ?>
+                ?>
+            </div>
         </div>
-    </div>
     <?php } ?>
 
     <div class="form-row">
@@ -116,4 +122,4 @@ if (mysqli_num_rows($result) > 0) {
 
     <button type="submit" class="btn btn-primary" id="submit" name="submit">บันทึก</button>
 </form>
-<?php include("footer.php"); ?>
+<?php include "footer.php"; ?>
