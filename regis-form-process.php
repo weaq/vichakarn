@@ -1,42 +1,84 @@
 <?php
+session_start();
+include "login-chk.php";
+$current_user = get_user_detail();
 
-/*
-function submitsForm($params)
+if (isset($_POST['submit']) && $current_user['is_login']) {
+    print_r($_POST);
+    submitsForm($_POST, $current_user);
+} else {
+    echo 'กรุณาเข้าสู่ระบบ';
+}
+
+
+function submitsForm($params, $current_user)
 {
-
-    global $wpdb;
+    include "dbconnect.php";
 
     $error = 0;
     $arr_insert_id = [];
 
-    $current_user = wp_get_current_user();
 
-    $sql = "SELECT * FROM wp_schools WHERE school_id = {$current_user->user_login}";
-    $wp_schools = $wpdb->get_results($sql, ARRAY_A);
+    $sql = "SELECT id FROM schools WHERE staff_id = {$current_user['user_id']} AND school_name LIKE '{$params['school_name']}' LIMIT 1";
+    $tmp_result = mysqli_query($conn, $sql);
+    $arr_schools = [];
+    if (mysqli_num_rows($tmp_result) > 0) {
+        // output data of each row
+        while ($row = mysqli_fetch_assoc($tmp_result)) {
+            $arr_schools[] = $row;
+        }
+        $school_id = $arr_schools[0]['id'];
+    } else {
+        $sql = "INSERT INTO schools (id, school_name, staff_id) VALUES (NULL, '{$params['school_name']}', '{$current_user['user_id']}')";
 
-    $school_id = filter_var($wp_schools[0]['school_id'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $go_id = filter_var($wp_schools[0]['go_id'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (mysqli_query($conn, $sql)) {
+            $school_id = mysqli_insert_id($conn);
+            #echo "New record created successfully. Last inserted ID is: " . $last_id;
+        } else {
+            echo "Error.";
+            #echo $sql . "<br>" . mysqli_error($conn);
+        }
+    }
 
     $groupsara_id = filter_var($params['groupsara_id'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $activity_id = filter_var($params['activity_id'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $class_id = filter_var($params['class_id'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-    $sql = "SELECT ID, activity_id, activity_name, group_status, class_id, class_name, student_no, teacher_no FROM wp_groupsara WHERE ID = '" . $groupsara_id . "' ";
-    $wp_groupsara = $wpdb->get_results($sql, ARRAY_A);
-
-    $student_count = count($params['student_firstname']);
-    $student_count = ($wp_groupsara[0]['student_no'] > $student_count) ? $student_count : $wp_groupsara[0]['student_no'];
-
-    if ($wp_groupsara[0]['class_id'] != "11") {
-        $teacher_count = count($params['coach_firstname']);
-        $teacher_count = ($wp_groupsara[0]['teacher_no'] > $teacher_count) ? $teacher_count : $wp_groupsara[0]['teacher_no'];
+    $sql = "SELECT ID, activity_id, activity_name, group_status, class_id, class_name, student_no, teacher_no FROM groupsara WHERE ID = '" . $groupsara_id . "' ";
+    $tmp_result = mysqli_query($conn, $sql);
+    $arr_groupsara = [];
+    if (mysqli_num_rows($tmp_result) > 0) {
+        // output data of each row
+        while ($row = mysqli_fetch_assoc($tmp_result)) {
+            $arr_groupsara[] = $row;
+        }
     }
 
+    $student_count = count($params['student_firstname']);
+    $student_count = ($arr_groupsara[0]['student_no'] > $student_count) ? $student_count : $arr_groupsara[0]['student_no'];
+
+    if ($arr_groupsara[0]['class_id'] != "11") {
+        $teacher_count = count($params['coach_firstname']);
+        $teacher_count = ($arr_groupsara[0]['teacher_no'] > $teacher_count) ? $teacher_count : $arr_groupsara[0]['teacher_no'];
+    }
 
     // studentreg 
-    $sql = "SELECT ID FROM wp_studentreg WHERE school_id = {$school_id} AND groupsara_id = {$groupsara_id} ";
-    $student_reg_chk = $wpdb->get_results($sql, ARRAY_A);
+    $sql = "SELECT ID FROM studentreg WHERE school_id = {$school_id} AND groupsara_id = {$groupsara_id} ";
+    $tmp_result = mysqli_query($conn, $sql);
+    $student_reg_chk = [];
+    if (mysqli_num_rows($tmp_result) > 0) {
+        // output data of each row
+        while ($row = mysqli_fetch_assoc($tmp_result)) {
+            $student_reg_chk[] = $row;
+        }
+    }
+
     $count_student_reg_chk = count($student_reg_chk);
+
+    echo $count_student_reg_chk;
+
+
+
 
     if ($count_student_reg_chk == 0) {
 
@@ -50,11 +92,11 @@ function submitsForm($params)
 
             if (!empty($student_prefix) && !empty($student_firstname) && !empty($student_lastname)) {
 
-                $sql = "INSERT INTO wp_studentreg (ID, reg_id, school_id, go_id, groupsara_id, activity_id, class_id, reg_status, student_prefix, student_firstname, student_lastname, display_name, student_image, tel) 
-				VALUES (NULL, CURRENT_TIMESTAMP, '{$school_id}', '{$go_id}', '{$groupsara_id}', '{$activity_id}', '{$class_id}', NULL, '{$student_prefix}', '{$student_firstname}', '{$student_lastname}', NULL, NULL, {$student_tel});
+                $sql = "INSERT INTO studentreg (ID, school_id, staff_id, groupsara_id, activity_id, class_id, student_prefix, student_firstname, student_lastname, display_name, student_image, tel) 
+				VALUES (NULL, '{$school_id}', '{$current_user['user_id']}', '{$groupsara_id}', '{$activity_id}', '{$class_id}', '{$student_prefix}', '{$student_firstname}', '{$student_lastname}', NULL, NULL, '{$student_tel}' );
 				";
 
-                if ($wpdb->query($sql)) {
+                if (mysqli_query($conn, $sql)) {
 
                     if (isset($_FILES['student_img']['tmp_name'][$i]) && $_FILES['student_img']['size'][$i] > 0) {
                         echo $_FILES['student_img']['tmp_name'][$i];
@@ -62,7 +104,7 @@ function submitsForm($params)
                     }
 
 
-                    $arr_insert_id['student'][$i] = $wpdb->insert_id;
+                    $arr_insert_id['student'][$i] = mysqli_insert_id($conn);
 
                     if (isset($_FILES['student_img']['tmp_name'][$i]) && $_FILES['student_img']['size'][$i] > 0) {
                         list($width, $height, $type, $attr) = getimagesize($_FILES['student_img']['tmp_name'][$i]);
@@ -87,7 +129,7 @@ function submitsForm($params)
 
             if (!empty($student_prefix) && !empty($student_firstname) && !empty($student_lastname)) {
 
-                $sql = "UPDATE wp_studentreg SET student_prefix = '{$student_prefix}', student_firstname = '{$student_firstname}', student_lastname = '{$student_lastname}', tel = '$student_tel' WHERE ID = {$student_reg_chk[$i]['ID']} 
+                $sql = "UPDATE studentreg SET student_prefix = '{$student_prefix}', student_firstname = '{$student_firstname}', student_lastname = '{$student_lastname}', tel = '$student_tel' WHERE ID = {$student_reg_chk[$i]['ID']} 
 				";
 
                 $arr_insert_id['student'][$i] = $student_reg_chk[$i]['ID'];
@@ -99,7 +141,7 @@ function submitsForm($params)
                     }
                 }
 
-                if ($wpdb->query($sql)) {
+                if (mysqli_query($conn, $sql)) {
                 } else {
                     $error = 2;
                 }
@@ -107,7 +149,7 @@ function submitsForm($params)
         }
 
         // insert studentreg
-        for ($i = $i; $i < $wp_groupsara[0]['student_no']; $i++) {
+        for ($i = $i; $i < $arr_groupsara[0]['student_no']; $i++) {
 
             $student_prefix = filter_var($params['student_prefix'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $student_firstname = filter_var($params['student_firstname'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -116,12 +158,12 @@ function submitsForm($params)
 
             if (!empty($student_prefix) && !empty($student_firstname) && !empty($student_lastname)) {
 
-                $sql = "INSERT INTO wp_studentreg (ID, reg_id, school_id, go_id, groupsara_id, activity_id, class_id, reg_status, student_prefix, student_firstname, student_lastname, display_name, student_image, tel) 
-				VALUES (NULL, CURRENT_TIMESTAMP, '{$school_id}', '{$go_id}', '{$groupsara_id}', '{$activity_id}', '{$class_id}', NULL, '{$student_prefix}', '{$student_firstname}', '{$student_lastname}', NULL, NULL, $student_tel);
+                $sql = "INSERT INTO studentreg (ID, school_id, staff_id, groupsara_id, activity_id, class_id, student_prefix, student_firstname, student_lastname, display_name, student_image, tel) 
+				VALUES (NULL, '{$school_id}', '{$current_user['user_id']}', '{$groupsara_id}', '{$activity_id}', '{$class_id}', '{$student_prefix}', '{$student_firstname}', '{$student_lastname}', NULL, NULL, '{$student_tel}');
 				";
 
-                if ($wpdb->query($sql)) {
-                    $arr_insert_id['student'][$i] = $wpdb->insert_id;
+                if (mysqli_query($conn, $sql)) {
+                    $arr_insert_id['student'][$i] = mysqli_insert_id($conn);
 
                     if (isset($_FILES['student_img']['tmp_name'][$i]) && $_FILES['student_img']['size'][$i] > 0) {
                         list($width, $height, $type, $attr) = getimagesize($_FILES['student_img']['tmp_name'][$i]);
@@ -137,10 +179,18 @@ function submitsForm($params)
     }
 
 
-    if ($wp_groupsara[0]['class_id'] != "11") {
+    if ($arr_groupsara[0]['class_id'] != "11") {
         // teacherreg 
-        $sql = "SELECT ID FROM wp_teacherreg WHERE school_id = {$school_id} AND groupsara_id = {$groupsara_id} ";
-        $teacher_reg_chk = $wpdb->get_results($sql, ARRAY_A);
+        $sql = "SELECT ID FROM teacherreg WHERE school_id = {$school_id} AND groupsara_id = {$groupsara_id} ";
+        $tmp_result = mysqli_query($conn, $sql);
+        $teacher_reg_chk = [];
+        if (mysqli_num_rows($tmp_result) > 0) {
+            // output data of each row
+            while ($row = mysqli_fetch_assoc($tmp_result)) {
+                $teacher_reg_chk[] = $row;
+            }
+        }
+
         $count_teacher_reg_chk = count($teacher_reg_chk);
 
         if ($count_teacher_reg_chk == 0) {
@@ -155,12 +205,13 @@ function submitsForm($params)
 
                 if (!empty($teacher_prefix) && !empty($teacher_firstname) && !empty($teacher_lastname)) {
 
-                    $sql = "INSERT INTO wp_teacherreg (ID, reg_id, school_id, go_id, groupsara_id, activity_id, class_id, reg_status, teacher_prefix, teacher_firstname, teacher_lastname, display_name, teacher_image, tel ) 
-			VALUES (NULL, CURRENT_TIMESTAMP, '{$school_id}', '{$go_id}', '{$groupsara_id}', '{$activity_id}', '{$class_id}', NULL, '{$teacher_prefix}', '{$teacher_firstname}', '{$teacher_lastname}', NULL, NULL, '{$teacher_tel}' );
+                    $sql = "INSERT INTO teacherreg (ID, school_id, staff_id, groupsara_id, activity_id, class_id, teacher_prefix, teacher_firstname, teacher_lastname, display_name, teacher_image, tel ) 
+			VALUES (NULL, '{$school_id}', '{$current_user['user_id']}', '{$groupsara_id}', '{$activity_id}', '{$class_id}', '{$teacher_prefix}', '{$teacher_firstname}', '{$teacher_lastname}', NULL, NULL, '{$teacher_tel}' );
 			";
 
-                    if ($wpdb->query($sql)) {
-                        $arr_insert_id['teacher'][$i] = $wpdb->insert_id;
+
+                    if (mysqli_query($conn, $sql)) {
+                        $arr_insert_id['teacher'][$i] = mysqli_insert_id($conn);
 
                         if (isset($_FILES['coach_img']['tmp_name'][$i]) && $_FILES['coach_img']['size'][$i] > 0) {
                             list($width, $height, $type, $attr) = getimagesize($_FILES['coach_img']['tmp_name'][$i]);
@@ -185,7 +236,7 @@ function submitsForm($params)
 
                 if (!empty($teacher_prefix) && !empty($teacher_firstname) && !empty($teacher_lastname)) {
 
-                    $sql = "UPDATE wp_teacherreg SET teacher_prefix = '{$teacher_prefix}', teacher_firstname = '{$teacher_firstname}', teacher_lastname = '{$teacher_lastname}', tel = '{$teacher_tel}' WHERE ID = {$teacher_reg_chk[$i]['ID']} 
+                    $sql = "UPDATE teacherreg SET teacher_prefix = '{$teacher_prefix}', teacher_firstname = '{$teacher_firstname}', teacher_lastname = '{$teacher_lastname}', tel = '{$teacher_tel}' WHERE ID = {$teacher_reg_chk[$i]['ID']} 
 				";
 
                     $arr_insert_id['teacher'][$i] = $teacher_reg_chk[$i]['ID'];
@@ -197,7 +248,7 @@ function submitsForm($params)
                         }
                     }
 
-                    if ($wpdb->query($sql)) {
+                    if (mysqli_query($conn, $sql)) {
                     } else {
                         $error = 5;
                     }
@@ -205,7 +256,7 @@ function submitsForm($params)
             }
 
             // insert teacherreg
-            for ($i = $i; $i < $wp_groupsara[0]['teacher_no']; $i++) {
+            for ($i = $i; $i < $arr_groupsara[0]['teacher_no']; $i++) {
 
                 $teacher_prefix = filter_var($params['coach_prefix'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 $teacher_firstname = filter_var($params['coach_firstname'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -214,12 +265,12 @@ function submitsForm($params)
 
                 if (!empty($teacher_prefix) && !empty($teacher_firstname) && !empty($teacher_lastname)) {
 
-                    $sql = "INSERT INTO wp_teacherreg (ID, reg_id, school_id, go_id, groupsara_id, activity_id, class_id, reg_status, teacher_prefix, teacher_firstname, teacher_lastname, display_name, teacher_image, tel ) 
-			VALUES (NULL, CURRENT_TIMESTAMP, '{$school_id}', '{$go_id}', '{$groupsara_id}', '{$activity_id}', '{$class_id}', NULL, '{$teacher_prefix}', '{$teacher_firstname}', '{$teacher_lastname}', NULL, NULL, '{$teacher_tel}' );
+                    $sql = "INSERT INTO teacherreg (ID, school_id, staff_id, groupsara_id, activity_id, class_id, teacher_prefix, teacher_firstname, teacher_lastname, display_name, teacher_image, tel ) 
+			VALUES (NULL, '{$school_id}', '{$current_user['user_id']}', '{$groupsara_id}', '{$activity_id}', '{$class_id}', '{$teacher_prefix}', '{$teacher_firstname}', '{$teacher_lastname}', NULL, NULL, '{$teacher_tel}' );
 			";
 
-                    if ($wpdb->query($sql)) {
-                        $arr_insert_id['teacher'][$i] = $wpdb->insert_id;
+                    if (mysqli_query($conn, $sql)) {
+                        $arr_insert_id['teacher'][$i] = mysqli_insert_id($conn);
 
                         if (isset($_FILES['coach_img']['tmp_name'][$i]) && $_FILES['coach_img']['size'][$i] > 0) {
                             list($width, $height, $type, $attr) = getimagesize($_FILES['coach_img']['tmp_name'][$i]);
@@ -235,11 +286,17 @@ function submitsForm($params)
         }
     }
 
+
     //print_r($arr_insert_id);
 	if ($error) {
-		//wp_redirect($params['base_page'] . '?error=1');
+		$newURL = $params['base_page'] . '&error=1';
+        header('Location: '.$newURL);
+        
+
 	} else {
-		//wp_redirect($params['base_page'] . '?success=1');
+		$newURL = $params['base_page'] . '&success=1';
+        header('Location: '.$newURL);
+
 	}
 	
 
@@ -248,25 +305,27 @@ function submitsForm($params)
 
     #wp_redirect($params['base_page'] . '?success=1&sID=' . $groupsara_id);
     //exit;
+
+
 }
 
-*/
 
-/*
+
+
 function upload_img($fileName, $fileSize, $fileTmpName, $fileType, $id, $dir_upload, $school_id)
 {
-    $uploadDirectory = "../img-upload/" . $dir_upload . "/";
+    $uploadDirectory = "img-upload/" . $dir_upload . "/";
 
     $upload_errors = []; // Store errors here
 
     $fileExtensionsAllowed = ['jpeg', 'jpg']; //['jpeg', 'jpg', 'png']; // These will be the only file extensions allowed 
 
-    
-	//$fileName =  $image['name'];
-	//$fileSize = $image['size'];
-	//$fileTmpName  = $image['tmp_name'];
-	//$fileType = $image['type'];
-    
+
+    //$fileName =  $image['name'];
+    //$fileSize = $image['size'];
+    //$fileTmpName  = $image['tmp_name'];
+    //$fileType = $image['type'];
+
 
 
     $fileExtension = strtolower(end(explode('.', $fileName)));
@@ -304,12 +363,3 @@ function upload_img($fileName, $fileSize, $fileTmpName, $fileType, $id, $dir_upl
         }
     }
 }
-
-*/
-
-if (isset($_POST['submit'])) {
-    
-    print_r($_POST);
-}
-
-?>

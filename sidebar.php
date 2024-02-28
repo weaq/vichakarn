@@ -64,7 +64,7 @@
         <div class="mb-5">
             <div>
                 <?php
-                echo $current_user['is_login'] ? 'ผู้ใช้งาน :' . '<br>' . $current_user['user_name'] : '';
+                echo $current_user['is_login'] ? 'ชื่อผู้ใช้: ' . $current_user['user_login'] . '<br>' . $current_user['user_name'] : '';
                 ?>
             </div>
             <ul class="list-unstyled components mb-5">

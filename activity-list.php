@@ -109,7 +109,7 @@ include "header.php";
 							if ($result_activity[0]['student_no']) {
 
 
-								$sql = "SELECT COUNT(id) as cid FROM `studentreg` WHERE groupsara_id = '{$result_activity[0]['ID']}' AND school_id = '{$current_user['user_login']}' ";
+								$sql = "SELECT COUNT(id) as cid FROM `studentreg` WHERE groupsara_id = '{$result_activity[0]['ID']}' AND staff_id = '{$current_user['user_id']}' ";
 								$tmp_result = mysqli_query($conn, $sql);
 								$result_count_student = [];
 								if (mysqli_num_rows($tmp_result) > 0) {
@@ -119,8 +119,7 @@ include "header.php";
 									}
 								}
 
-
-								$sql = "SELECT COUNT(id) as cid FROM `teacherreg` WHERE groupsara_id = '{$result_activity[0]['ID']}' AND school_id = '{$current_user['user_login']}' ";
+								$sql = "SELECT COUNT(id) as cid FROM `teacherreg` WHERE groupsara_id = '{$result_activity[0]['ID']}' AND staff_id = '{$current_user['user_id']}' ";
 								$tmp_result = mysqli_query($conn, $sql);
 								$result_count_teacher = [];
 								if (mysqli_num_rows($tmp_result) > 0) {
