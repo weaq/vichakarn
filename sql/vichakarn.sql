@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: 28 ก.พ. 2024 เมื่อ 07:21 AM
--- เวอร์ชันของเซิร์ฟเวอร์: 8.0.35-0ubuntu0.20.04.1
+-- Generation Time: 28 ก.พ. 2024 เมื่อ 04:09 PM
+-- เวอร์ชันของเซิร์ฟเวอร์: 8.0.36-0ubuntu0.20.04.1
 -- PHP Version: 7.4.3-4ubuntu2.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -152,6 +152,18 @@ INSERT INTO `groupsara` (`ID`, `group_id`, `group_name`, `group_status`, `activi
 -- --------------------------------------------------------
 
 --
+-- โครงสร้างตาราง `schools`
+--
+
+CREATE TABLE `schools` (
+  `id` int NOT NULL,
+  `school_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `staff_id` int NOT NULL COMMENT 'id หน่วยงานต้นสังกัด'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- โครงสร้างตาราง `staff`
 --
 
@@ -170,7 +182,7 @@ CREATE TABLE `staff` (
 --
 
 INSERT INTO `staff` (`id`, `user`, `passwd`, `name`, `tel`, `email`, `last_login`) VALUES
-(1, '03410102', 'd0970714757783e6cf17b26fb8e2298f', 'เทศบาลนครอุดรธานี', '042 325178', 'admin@udoncity.go.th', '2024-02-27 22:03:35');
+(1, '03410102', 'd54d1702ad0f8326224b817c796763c9', 'เทศบาลนครอุดรธานี', '042 325 178', 'admin@udoncity.go.th', '2024-02-28 16:00:50');
 
 -- --------------------------------------------------------
 
@@ -180,13 +192,11 @@ INSERT INTO `staff` (`id`, `user`, `passwd`, `name`, `tel`, `email`, `last_login
 
 CREATE TABLE `studentreg` (
   `ID` int NOT NULL,
-  `reg_id` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `school_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'รหัสโรงเรียน10หลัก',
-  `go_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'รหัสหน่วยงานต้นสังกัด',
+  `school_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'id table schools',
+  `staff_id` int NOT NULL COMMENT 'id หน่วยงานต้นสังกัด',
   `groupsara_id` int NOT NULL COMMENT 'ID tbl wp_groupsara',
   `activity_id` int NOT NULL COMMENT 'รหัสกิจกรรม',
   `class_id` int NOT NULL COMMENT 'รหัสระดับ',
-  `reg_status` int DEFAULT NULL COMMENT 'สถานะสมัคร',
   `student_prefix` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'คำนำหน้า',
   `student_firstname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'ชื่อ',
   `student_lastname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'นามสกุล',
@@ -203,13 +213,11 @@ CREATE TABLE `studentreg` (
 
 CREATE TABLE `teacherreg` (
   `ID` int UNSIGNED NOT NULL,
-  `reg_id` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `school_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'รหัสโรงเรียน10หลัก',
-  `go_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'รหัสหน่วยงานต้นสังกัด',
+  `school_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'id table schools',
+  `staff_id` int NOT NULL COMMENT 'id หน่วยงานต้นสังกัด',
   `groupsara_id` int NOT NULL,
   `activity_id` int NOT NULL COMMENT 'รหัสกิจกรรม',
   `class_id` int NOT NULL COMMENT 'รหัสระดับ',
-  `reg_status` int DEFAULT NULL COMMENT 'สถานะสมัคร',
   `teacher_prefix` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'คำนำหน้า',
   `teacher_firstname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'ชื่อ',
   `teacher_lastname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'นามสกุล',
@@ -227,6 +235,12 @@ CREATE TABLE `teacherreg` (
 --
 ALTER TABLE `groupsara`
   ADD PRIMARY KEY (`ID`) USING BTREE;
+
+--
+-- Indexes for table `schools`
+--
+ALTER TABLE `schools`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `staff`
@@ -258,6 +272,12 @@ ALTER TABLE `teacherreg`
 --
 ALTER TABLE `groupsara`
   MODIFY `ID` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+
+--
+-- AUTO_INCREMENT for table `schools`
+--
+ALTER TABLE `schools`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `staff`
