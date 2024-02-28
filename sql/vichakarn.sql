@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: 27 ก.พ. 2024 เมื่อ 02:43 PM
--- เวอร์ชันของเซิร์ฟเวอร์: 8.0.36-0ubuntu0.20.04.1
+-- Generation Time: 28 ก.พ. 2024 เมื่อ 07:21 AM
+-- เวอร์ชันของเซิร์ฟเวอร์: 8.0.35-0ubuntu0.20.04.1
 -- PHP Version: 7.4.3-4ubuntu2.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -29,17 +29,17 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `groupsara` (
-  `ID` bigint UNSIGNED NOT NULL,
-  `group_id` bigint UNSIGNED DEFAULT NULL COMMENT 'รหัสกลุ่มสาระ',
+  `ID` int UNSIGNED NOT NULL,
+  `group_id` int UNSIGNED DEFAULT NULL COMMENT 'รหัสกลุ่มสาระ',
   `group_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'กลุ่มสาระ',
-  `group_status` bigint DEFAULT NULL COMMENT 'สถานะ',
-  `activity_id` bigint UNSIGNED DEFAULT NULL COMMENT 'รหัสกิจกรรม',
+  `group_status` int DEFAULT NULL COMMENT 'สถานะ',
+  `activity_id` int UNSIGNED DEFAULT NULL COMMENT 'รหัสกิจกรรม',
   `activity_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'ชื่อกิจกรรม',
-  `class_id` bigint UNSIGNED DEFAULT NULL COMMENT 'รหัสระดับ',
+  `class_id` int UNSIGNED DEFAULT NULL COMMENT 'รหัสระดับ',
   `class_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'ชื่อระดับ',
-  `student_no_min` bigint UNSIGNED DEFAULT NULL COMMENT 'จำนวนนักเรียนน้อยสุด',
-  `student_no` bigint UNSIGNED DEFAULT NULL COMMENT 'จำนวนนักเรียน',
-  `teacher_no` bigint UNSIGNED DEFAULT NULL COMMENT 'จำนวนผู้ควบคุม',
+  `student_no_min` int UNSIGNED DEFAULT NULL COMMENT 'จำนวนนักเรียนน้อยสุด',
+  `student_no` int UNSIGNED DEFAULT NULL COMMENT 'จำนวนนักเรียน',
+  `teacher_no` int UNSIGNED DEFAULT NULL COMMENT 'จำนวนผู้ควบคุม',
   `location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'สถานที่แข่งขัน',
   `match_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'เวลาการแข่งขัน',
   `match_date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'วันที่แข่งขัน'
@@ -157,20 +157,20 @@ INSERT INTO `groupsara` (`ID`, `group_id`, `group_name`, `group_status`, `activi
 
 CREATE TABLE `staff` (
   `id` int NOT NULL,
-  `user` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `passwd` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `tel` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `email` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `last_login` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+  `user` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `passwd` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tel` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `last_login` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- dump ตาราง `staff`
 --
 
 INSERT INTO `staff` (`id`, `user`, `passwd`, `name`, `tel`, `email`, `last_login`) VALUES
-(1, '03410102', 'd0970714757783e6cf17b26fb8e2298f', 'เทศบาลนครอุดรธานี', '042 325178', 'admin@udoncity.go.th', '2024-02-27 13:54:13');
+(1, '03410102', 'd0970714757783e6cf17b26fb8e2298f', 'เทศบาลนครอุดรธานี', '042 325178', 'admin@udoncity.go.th', '2024-02-27 22:03:35');
 
 -- --------------------------------------------------------
 
@@ -181,18 +181,18 @@ INSERT INTO `staff` (`id`, `user`, `passwd`, `name`, `tel`, `email`, `last_login
 CREATE TABLE `studentreg` (
   `ID` int NOT NULL,
   `reg_id` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `school_id` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'รหัสโรงเรียน10หลัก',
-  `go_id` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'รหัสหน่วยงานต้นสังกัด',
+  `school_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'รหัสโรงเรียน10หลัก',
+  `go_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'รหัสหน่วยงานต้นสังกัด',
   `groupsara_id` int NOT NULL COMMENT 'ID tbl wp_groupsara',
   `activity_id` int NOT NULL COMMENT 'รหัสกิจกรรม',
   `class_id` int NOT NULL COMMENT 'รหัสระดับ',
   `reg_status` int DEFAULT NULL COMMENT 'สถานะสมัคร',
-  `student_prefix` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'คำนำหน้า',
-  `student_firstname` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'ชื่อ',
-  `student_lastname` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'นามสกุล',
-  `display_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `student_image` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'รูปภาพ',
-  `tel` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `student_prefix` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'คำนำหน้า',
+  `student_firstname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'ชื่อ',
+  `student_lastname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'นามสกุล',
+  `display_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `student_image` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'รูปภาพ',
+  `tel` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -204,18 +204,18 @@ CREATE TABLE `studentreg` (
 CREATE TABLE `teacherreg` (
   `ID` int UNSIGNED NOT NULL,
   `reg_id` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `school_id` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'รหัสโรงเรียน10หลัก',
-  `go_id` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'รหัสหน่วยงานต้นสังกัด',
+  `school_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'รหัสโรงเรียน10หลัก',
+  `go_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'รหัสหน่วยงานต้นสังกัด',
   `groupsara_id` int NOT NULL,
   `activity_id` int NOT NULL COMMENT 'รหัสกิจกรรม',
   `class_id` int NOT NULL COMMENT 'รหัสระดับ',
   `reg_status` int DEFAULT NULL COMMENT 'สถานะสมัคร',
-  `teacher_prefix` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'คำนำหน้า',
-  `teacher_firstname` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'ชื่อ',
-  `teacher_lastname` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'นามสกุล',
-  `display_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `teacher_image` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'รูปภาพ',
-  `tel` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'โทร.'
+  `teacher_prefix` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'คำนำหน้า',
+  `teacher_firstname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'ชื่อ',
+  `teacher_lastname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'นามสกุล',
+  `display_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `teacher_image` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'รูปภาพ',
+  `tel` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'โทร.'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -257,7 +257,7 @@ ALTER TABLE `teacherreg`
 -- AUTO_INCREMENT for table `groupsara`
 --
 ALTER TABLE `groupsara`
-  MODIFY `ID` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+  MODIFY `ID` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 
 --
 -- AUTO_INCREMENT for table `staff`
