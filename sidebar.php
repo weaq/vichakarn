@@ -58,7 +58,7 @@
                 </ul>
             </li>
             <li>
-                <a href="#">หลักเกณฑ์การแข่งขัน</a>
+                <a href="https://drive.google.com/file/d/10s0wNCqI9QnOivPn1n7S09uizPO5soqM">หลักเกณฑ์การแข่งขัน</a>
             </li>
             <?php if ($current_user['is_login']) { ?>
                 <li class="mt-3">

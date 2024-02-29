@@ -48,4 +48,4 @@
                 </div>
                 <hr>
             </div>
-            <div class="p-md-5">
+            <div class="m-md-5">
