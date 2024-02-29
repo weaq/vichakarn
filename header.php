@@ -36,16 +36,16 @@
                 <img src="img/bg.jpg" class="img-fluid" alt="Responsive image">
             </div>
 -->
-            <div class="p-4 p-md-5">
-                <div class="mb-3 text-right">
-                    <div class="h3 ">
-                        การประกวดแข่งขันทักษะทางวิชาการ
-                    </div>
-                    <div class="h5 ">
-                        การจัดงานมหกรรมการศึกษาท้องถิ่น ระดับภาคตะวันออกเฉียงเหนือ ครั้งที่ 29
-                    </div>
-                    <div class="h6 ">
-                        เทศบาลนครอุดรธานี
-                    </div>
-                    <hr>
+            <div class="px-4 pt-4 pb-1 text-right" style="background-color: #fcbc5c !important;">
+                <div class="h3 text-white">
+                    การประกวดแข่งขันทักษะทางวิชาการ
                 </div>
+                <div class="h5 text-white">
+                    การจัดงานมหกรรมการศึกษาท้องถิ่น ระดับภาคตะวันออกเฉียงเหนือ ครั้งที่ 29
+                </div>
+                <div class="h6 text-white">
+                    เทศบาลนครอุดรธานี
+                </div>
+                <hr>
+            </div>
+            <div class="p-md-5">

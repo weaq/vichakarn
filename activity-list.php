@@ -74,7 +74,7 @@ include "header.php";
 					<th>&nbsp;</th>
 				</tr>
 				<tr>
-					<th>ชื่อกิจกรรม</th>
+					<th>รายการ</th>
 					<?php
 					foreach ($arr_class as $value) {
 						echo '<th class="text-center">' . $value['class_name'] . '</th>';
@@ -179,7 +179,7 @@ include "header.php";
 
 								if ($school_id_count[0]['school_count']) {
 									echo '<td class="text-center">';
-									echo '<a href="../activity-school/?sID=' . $result_activity[0]['ID'] . '" target="_blank" >' . $school_id_count[0]['school_count'] . ' โรง </a>';
+									echo '<a href="activity-school.php?sID=' . $result_activity[0]['ID'] . '" target="_blank" >' . $school_id_count[0]['school_count'] . ' โรง </a>';
 									echo '</td>';
 								} else {
 									echo '<td class="text-center"> - </td>';
