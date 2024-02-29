@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: 28 ก.พ. 2024 เมื่อ 04:09 PM
--- เวอร์ชันของเซิร์ฟเวอร์: 8.0.36-0ubuntu0.20.04.1
+-- Generation Time: 29 ก.พ. 2024 เมื่อ 07:34 AM
+-- เวอร์ชันของเซิร์ฟเวอร์: 8.0.35-0ubuntu0.20.04.1
 -- PHP Version: 7.4.3-4ubuntu2.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -157,9 +157,16 @@ INSERT INTO `groupsara` (`ID`, `group_id`, `group_name`, `group_status`, `activi
 
 CREATE TABLE `schools` (
   `id` int NOT NULL,
-  `school_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `school_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `staff_id` int NOT NULL COMMENT 'id หน่วยงานต้นสังกัด'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- dump ตาราง `schools`
+--
+
+INSERT INTO `schools` (`id`, `school_name`, `staff_id`) VALUES
+(4, 'โรงเรียนเทศบาล 1', 1);
 
 -- --------------------------------------------------------
 
@@ -182,7 +189,7 @@ CREATE TABLE `staff` (
 --
 
 INSERT INTO `staff` (`id`, `user`, `passwd`, `name`, `tel`, `email`, `last_login`) VALUES
-(1, '03410102', 'd54d1702ad0f8326224b817c796763c9', 'เทศบาลนครอุดรธานี', '042 325 178', 'admin@udoncity.go.th', '2024-02-28 16:00:50');
+(1, '03410102', 'd54d1702ad0f8326224b817c796763c9', 'เทศบาลนครอุดรธานี', '042 325 178', 'admin@udoncity.go.th', '2024-02-29 07:33:47');
 
 -- --------------------------------------------------------
 
@@ -197,7 +204,7 @@ CREATE TABLE `studentreg` (
   `groupsara_id` int NOT NULL COMMENT 'ID tbl wp_groupsara',
   `activity_id` int NOT NULL COMMENT 'รหัสกิจกรรม',
   `class_id` int NOT NULL COMMENT 'รหัสระดับ',
-  `student_prefix` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'คำนำหน้า',
+  `student_prefix` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'คำนำหน้า',
   `student_firstname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'ชื่อ',
   `student_lastname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'นามสกุล',
   `display_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -218,7 +225,7 @@ CREATE TABLE `teacherreg` (
   `groupsara_id` int NOT NULL,
   `activity_id` int NOT NULL COMMENT 'รหัสกิจกรรม',
   `class_id` int NOT NULL COMMENT 'รหัสระดับ',
-  `teacher_prefix` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'คำนำหน้า',
+  `teacher_prefix` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'คำนำหน้า',
   `teacher_firstname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'ชื่อ',
   `teacher_lastname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'นามสกุล',
   `display_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -277,7 +284,7 @@ ALTER TABLE `groupsara`
 -- AUTO_INCREMENT for table `schools`
 --
 ALTER TABLE `schools`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `staff`
@@ -289,13 +296,13 @@ ALTER TABLE `staff`
 -- AUTO_INCREMENT for table `studentreg`
 --
 ALTER TABLE `studentreg`
-  MODIFY `ID` int NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `teacherreg`
 --
 ALTER TABLE `teacherreg`
-  MODIFY `ID` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

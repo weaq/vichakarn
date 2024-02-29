@@ -1,6 +1,7 @@
 <?php
 session_start();
 include "config.php";
+$error = '';
 if (isset($_REQUEST['submit']) and !empty($_POST['user']) and !empty($_POST['passwd'])) {
     $_SESSION['sess_user'] = $_POST['user'];
     $_SESSION['sess_passwd'] = md5($_POST['passwd']);
@@ -26,16 +27,13 @@ if (isset($_REQUEST['submit']) and !empty($_POST['user']) and !empty($_POST['pas
         $_SESSION['sess_passwd'] = md5($_POST['passwd']);
 
         echo 'Login success : redirect to ' . $url;
-        header("refresh:1;url=$url");
+        header('Location: '.$url);
     } else {
-        echo "user or password not match.";
+        $error = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
     }
 
     mysqli_free_result($result);
     mysqli_close($conn);
-
-
-    exit();
 } else {
     $_SESSION['sess_user_id'] = "";
     $_SESSION['sess_user'] = "";
@@ -46,10 +44,14 @@ if (isset($_REQUEST['submit']) and !empty($_POST['user']) and !empty($_POST['pas
 
 <div class="d-flex justify-content-center flex-nowrap">
 
-
-    <form method="post" >
+    <form method="post">
+        <?php if (!empty($error)) : ?>
+            <div class="alert alert-danger">
+                <h5><?php echo $error; ?></h5>
+            </div>
+        <?php endif; ?>
         <div class="form-group h4">
-            เข้าสู่ระบบ 
+            เข้าสู่ระบบ
         </div>
         <div class="form-group">
             <label for="user">ชื่อผู้ใช้:</label>

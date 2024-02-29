@@ -60,24 +60,27 @@
             <li>
                 <a href="#">หลักเกณฑ์การแข่งขัน</a>
             </li>
+            <?php if ($current_user['is_login']) { ?>
+                <li class="mt-3">
+                    <a href="#pageSubmenuUser" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <?php echo $current_user['user_name']; ?>
+                    </a>
+                    <ul class="collapse list-unstyled" id="pageSubmenuUser">
+                        <li>
+                            <a href="admin-detail.php">ข้อมูลพื้นฐาน</a>
+                        </li>
+                        <li>
+                            <a href="logout.php">ออกจากระบบ</a>
+                        </li>
+                    </ul>
+                </li>
+            <?php } else { ?>
+                <li class="mt-3">
+                    <a href="login-form.php?ref=<?php echo basename($_SERVER['REQUEST_URI']) ; ?>">เข้าสู่ระบบ</a>
+                </li>
+            <?php } ?>
         </ul>
-        <div class="mb-5">
-            <div>
-                <?php
-                echo $current_user['is_login'] ? 'ชื่อผู้ใช้: ' . $current_user['user_login'] . '<br>' . $current_user['user_name'] : '';
-                ?>
-            </div>
-            <ul class="list-unstyled components mb-5">
-                <li>
-                    <a href="admin-detail.php">ข้อมูลพื้นฐาน</a>
-                </li>
-                <li>
-                    <?php
-                    echo ($current_user['is_login']) ? '<a href="logout.php">ออกจากระบบ</a>' : '<a href="login-form.php">เข้าระบบ</a>';
-                    ?>
-                </li>
-            </ul>
-        </div>
+
         <!--
         <div class="mb-5">
             <h3 class="h6">Subscribe for newsletter</h3>

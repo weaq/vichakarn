@@ -23,7 +23,7 @@ $domain = '/';
 
 <?php if (isset($_GET['error'])) : ?>
     <div class="alert alert-danger">
-        <h3>Sorry! Unable to submit the form.</h3>
+        <h3>ไม่สามารถทำรายการได้ โปรดตรวจสอบข้อมูลอีกครั้ง</h3>
     </div>
 <?php endif; ?>
 
@@ -35,7 +35,7 @@ $domain = '/';
 
             $error_delete = 1;
 
-            $sql = "SELECT ID, activity_id, activity_name, group_name, group_status, class_id, class_name, student_no, teacher_no FROM groupsara WHERE ID = '" . $_GET['sID'] . "' ORDER BY activity_name ASC ";
+            $sql = "SELECT ID, activity_id, activity_name, group_id, group_name, group_status, class_id, class_name, student_no, teacher_no FROM groupsara WHERE ID = '" . $_GET['sID'] . "' ORDER BY activity_name ASC ";
             $tmp_result = mysqli_query($conn, $sql);
             $groupsara = [];
             if (mysqli_num_rows($tmp_result) > 0) {
@@ -61,6 +61,9 @@ $domain = '/';
 
             if ($error_delete ==  0) {
                 echo '<div class="h3">ยกเลิกการสมัคร ' . $groupsara[0]['activity_name'] . ' ' . $groupsara[0]['class_name'] . ' เรียบร้อยแล้ว</div>';
+                echo '<div class="col-md-12 text-center">
+                        <a href="activity-list.php?group_id=' . $groupsara[0]['group_id'] . '" class="btn btn-info mx-3 my-3" role="button">ย้อนกลับกลุ่มสาระ</a>
+                    </div>';
             }
         }
         ?>
@@ -76,7 +79,7 @@ $domain = '/';
 
     if ($_GET['sID'] && $current_user['is_login'] && empty($_GET['rm'])) {
 
-        $sql = "SELECT ID, activity_id, activity_name, group_name, group_status, class_id, class_name, student_no, teacher_no FROM groupsara WHERE ID = '" . $_GET['sID'] . "' ORDER BY activity_name ASC ";
+        $sql = "SELECT ID, activity_id, activity_name, group_id, group_name, group_status, class_id, class_name, student_no, teacher_no FROM groupsara WHERE ID = '" . $_GET['sID'] . "' ORDER BY activity_name ASC ";
         $tmp_result = mysqli_query($conn, $sql);
         $groupsara = [];
         if (mysqli_num_rows($tmp_result) > 0) {
@@ -227,10 +230,11 @@ $domain = '/';
                             </div>
                         </div>
                         <div class="row">
-                            <div class="custom-file mt-2 mx-3">
-                                <input type="file" class="custom-file-input" id="coach_img[' . $i . ']" name="coach_img[' . $i . ']">
-                                <label class="custom-file-label" for="coach_img[' . $i . ']">เลือกรูปถ่าย</label>
+                            <div class="input-group mt-2 mx-3">
+                                <label class="input-group-text" for="coach_img[' . $i . ']">เลือกรูปถ่าย</label>
+                                <input type="file" class="form-control" id="coach_img[' . $i . ']" name="coach_img[' . $i . ']">
                             </div>
+                            
                         </div>
 
                     </div>
@@ -251,13 +255,16 @@ $domain = '/';
             <input type="hidden" id="class_id" name="class_id" value="' . $groupsara[0]['class_id'] . '">
 
             <input type="hidden" name="action" value="contact_form">
-            <input type="hidden" name="base_page" value="' . basename($_SERVER['REQUEST_URI']) . '">
+            <input type="hidden" name="base_page" value="' . basename($_SERVER['PHP_SELF']) . '">
 
             <div class="row">
-                <div class="col-md-6 text-center">
+                <div class="col-md-4 text-center">
+                    <a href="activity-list.php?group_id=' . $groupsara[0]['group_id'] . '" class="btn btn-info mx-3 my-3" role="button">ย้อนกลับกลุ่มสาระ</a>
+                </div>
+                <div class="col-md-4 text-center">
                     <div class="btn btn-warning mx-3 my-3" onclick="js_remove_record()">ยกเลิกการลงทะเบียน</div>
                 </div>
-                <div class="col-md-6 text-center">
+                <div class="col-md-4 text-center">
                     <button type="submit" id="submit" name="submit" class="btn btn-primary mx-3 my-3">บันทึกข้อมูล</button>
                 </div>
             </div>

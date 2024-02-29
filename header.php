@@ -14,7 +14,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" />
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
@@ -30,13 +30,22 @@
 
         <?php include("sidebar.php"); ?>
 
-        <div id="content" class="p-4 p-md-5 pt-5">
-            <div class="mb-3">
-                <div class="h3">
-                    การประกวดแข่งขันทักษะทางวิชาการ
-                </div>
-                <div class="h5">
-                    การจัดงานมหกรรมการศึกษาท้องถิ่น ระดับภาคตะวันออกเฉียงเหนือ ครั้งที่ 29
-                </div>
-                <hr>
+        <div id="content" class="">
+            <!--
+            <div>
+                <img src="img/bg.jpg" class="img-fluid" alt="Responsive image">
             </div>
+-->
+            <div class="p-4 p-md-5">
+                <div class="mb-3 text-right">
+                    <div class="h3 ">
+                        การประกวดแข่งขันทักษะทางวิชาการ
+                    </div>
+                    <div class="h5 ">
+                        การจัดงานมหกรรมการศึกษาท้องถิ่น ระดับภาคตะวันออกเฉียงเหนือ ครั้งที่ 29
+                    </div>
+                    <div class="h6 ">
+                        เทศบาลนครอุดรธานี
+                    </div>
+                    <hr>
+                </div>
