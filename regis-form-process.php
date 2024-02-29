@@ -12,7 +12,6 @@ if (isset($_POST['submit']) && $current_user['is_login']) {
     } else {
         echo 'error';
     }
-    
 } else {
     echo 'กรุณาเข้าสู่ระบบ';
 }
@@ -70,7 +69,7 @@ function submitsForm($params, $current_user)
     }
 
     // studentreg 
-    $sql = "SELECT ID FROM studentreg WHERE school_id = {$school_id} AND groupsara_id = {$groupsara_id} ";
+    $sql = "SELECT ID FROM studentreg WHERE staff_id = {$current_user['user_id']} AND groupsara_id = {$groupsara_id} ";
     $tmp_result = mysqli_query($conn, $sql);
     $student_reg_chk = [];
     if (mysqli_num_rows($tmp_result) > 0) {
@@ -83,9 +82,6 @@ function submitsForm($params, $current_user)
     $count_student_reg_chk = count($student_reg_chk);
 
     echo $count_student_reg_chk;
-
-
-
 
     if ($count_student_reg_chk == 0) {
 
@@ -136,7 +132,7 @@ function submitsForm($params, $current_user)
 
             if (!empty($student_prefix) && !empty($student_firstname) && !empty($student_lastname)) {
 
-                $sql = "UPDATE studentreg SET student_prefix = '{$student_prefix}', student_firstname = '{$student_firstname}', student_lastname = '{$student_lastname}', tel = '$student_tel' WHERE ID = {$student_reg_chk[$i]['ID']} 
+                $sql = "UPDATE studentreg SET school_id = '{$school_id}', student_prefix = '{$student_prefix}', student_firstname = '{$student_firstname}', student_lastname = '{$student_lastname}', tel = '$student_tel' WHERE ID = {$student_reg_chk[$i]['ID']} 
 				";
 
                 $arr_insert_id['student'][$i] = $student_reg_chk[$i]['ID'];
@@ -188,7 +184,7 @@ function submitsForm($params, $current_user)
 
     if ($arr_groupsara[0]['class_id'] != "11") {
         // teacherreg 
-        $sql = "SELECT ID FROM teacherreg WHERE school_id = {$school_id} AND groupsara_id = {$groupsara_id} ";
+        $sql = "SELECT ID FROM teacherreg WHERE staff_id = {$current_user['user_id']} AND groupsara_id = {$groupsara_id} ";
         $tmp_result = mysqli_query($conn, $sql);
         $teacher_reg_chk = [];
         if (mysqli_num_rows($tmp_result) > 0) {
@@ -243,7 +239,7 @@ function submitsForm($params, $current_user)
 
                 if (!empty($teacher_prefix) && !empty($teacher_firstname) && !empty($teacher_lastname)) {
 
-                    $sql = "UPDATE teacherreg SET teacher_prefix = '{$teacher_prefix}', teacher_firstname = '{$teacher_firstname}', teacher_lastname = '{$teacher_lastname}', tel = '{$teacher_tel}' WHERE ID = {$teacher_reg_chk[$i]['ID']} 
+                    $sql = "UPDATE teacherreg SET school_id = '{$school_id}', teacher_prefix = '{$teacher_prefix}', teacher_firstname = '{$teacher_firstname}', teacher_lastname = '{$teacher_lastname}', tel = '{$teacher_tel}' WHERE ID = {$teacher_reg_chk[$i]['ID']} 
 				";
 
                     $arr_insert_id['teacher'][$i] = $teacher_reg_chk[$i]['ID'];
@@ -295,22 +291,15 @@ function submitsForm($params, $current_user)
 
 
     //print_r($arr_insert_id);
-	if ($error) {
-		$newURL = $params['base_page'] . '?sID=' . $params['activity_id'] . '&error=1';
-        header('Location: '.$newURL);
-        
-
-	} else {
-		$newURL = $params['base_page'] . '?sID=' . $params['activity_id'] . '&success=1';
-        header('Location: '.$newURL);
-
-	}
-	
-
-    //echo $params['base_page'];
+    if ($error) {
+        $newURL = $params['base_page'] . '?sID=' . $params['activity_id'] . '&error=1';
+        header('Location: ' . $newURL);
+    } else {
+        $newURL = $params['base_page'] . '?sID=' . $params['activity_id'] . '&success=1';
+        header('Location: ' . $newURL);
+    }
 
 
-    #wp_redirect($params['base_page'] . '?success=1&sID=' . $groupsara_id);
     //exit;
 
 
@@ -332,7 +321,6 @@ function upload_img($fileName, $fileSize, $fileTmpName, $fileType, $id, $dir_upl
     //$fileSize = $image['size'];
     //$fileTmpName  = $image['tmp_name'];
     //$fileType = $image['type'];
-
 
 
     $fileExtension = strtolower(end(explode('.', $fileName)));
