@@ -91,12 +91,16 @@ function submitsForm($params, $current_user)
             $student_prefix = filter_var($params['student_prefix'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $student_firstname = filter_var($params['student_firstname'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $student_lastname = filter_var($params['student_lastname'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+            $student_cid = filter_var($params['student_cid'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $student_classroom = filter_var($params['student_classroom'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
             $student_tel = !empty($params['student_tel'][$i]) ? filter_var($params['student_tel'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS) : "NULL";
 
             if (!empty($student_prefix) && !empty($student_firstname) && !empty($student_lastname)) {
 
-                $sql = "INSERT INTO studentreg (ID, school_id, staff_id, groupsara_id, activity_id, class_id, student_prefix, student_firstname, student_lastname, display_name, student_image, tel) 
-				VALUES (NULL, '{$school_id}', '{$current_user['user_id']}', '{$groupsara_id}', '{$activity_id}', '{$class_id}', '{$student_prefix}', '{$student_firstname}', '{$student_lastname}', NULL, NULL, '{$student_tel}' );
+                $sql = "INSERT INTO studentreg (ID, school_id, staff_id, groupsara_id, activity_id, class_id, student_prefix, student_firstname, student_lastname, student_cid, student_classroom, display_name, student_image, tel) 
+				VALUES (NULL, '{$school_id}', '{$current_user['user_id']}', '{$groupsara_id}', '{$activity_id}', '{$class_id}', '{$student_prefix}', '{$student_firstname}', '{$student_lastname}', '{$student_cid}', '{$student_classroom}', NULL, NULL, '{$student_tel}' );
 				";
 
                 if (mysqli_query($conn, $sql)) {
@@ -128,11 +132,15 @@ function submitsForm($params, $current_user)
             $student_prefix = filter_var($params['student_prefix'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $student_firstname = filter_var($params['student_firstname'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $student_lastname = filter_var($params['student_lastname'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+            $student_cid = filter_var($params['student_cid'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $student_classroom = filter_var($params['student_classroom'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            
             $student_tel = !empty($params['student_tel'][$i]) ? filter_var($params['student_tel'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS) : "NULL";
 
             if (!empty($student_prefix) && !empty($student_firstname) && !empty($student_lastname)) {
 
-                $sql = "UPDATE studentreg SET school_id = '{$school_id}', student_prefix = '{$student_prefix}', student_firstname = '{$student_firstname}', student_lastname = '{$student_lastname}', tel = '$student_tel' WHERE ID = {$student_reg_chk[$i]['ID']} 
+                $sql = "UPDATE studentreg SET school_id = '{$school_id}', student_prefix = '{$student_prefix}', student_firstname = '{$student_firstname}', student_lastname = '{$student_lastname}', student_cid = '{$student_cid}', student_classroom = '{$student_classroom}', tel = '$student_tel' WHERE ID = {$student_reg_chk[$i]['ID']} 
 				";
 
                 $arr_insert_id['student'][$i] = $student_reg_chk[$i]['ID'];
@@ -157,12 +165,16 @@ function submitsForm($params, $current_user)
             $student_prefix = filter_var($params['student_prefix'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $student_firstname = filter_var($params['student_firstname'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $student_lastname = filter_var($params['student_lastname'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+            $student_cid = filter_var($params['student_cid'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $student_classroom = filter_var($params['student_classroom'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
             $student_tel = !empty($params['student_tel'][$i]) ? filter_var($params['student_tel'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS) : "NULL";
 
             if (!empty($student_prefix) && !empty($student_firstname) && !empty($student_lastname)) {
 
-                $sql = "INSERT INTO studentreg (ID, school_id, staff_id, groupsara_id, activity_id, class_id, student_prefix, student_firstname, student_lastname, display_name, student_image, tel) 
-				VALUES (NULL, '{$school_id}', '{$current_user['user_id']}', '{$groupsara_id}', '{$activity_id}', '{$class_id}', '{$student_prefix}', '{$student_firstname}', '{$student_lastname}', NULL, NULL, '{$student_tel}');
+                $sql = "INSERT INTO studentreg (ID, school_id, staff_id, groupsara_id, activity_id, class_id, student_prefix, student_firstname, student_lastname, student_cid, student_classroom, display_name, student_image, tel) 
+				VALUES (NULL, '{$school_id}', '{$current_user['user_id']}', '{$groupsara_id}', '{$activity_id}', '{$class_id}', '{$student_prefix}', '{$student_firstname}', '{$student_lastname}', '{$student_cid}', '{$student_classroom}', NULL, NULL, '{$student_tel}');
 				";
 
                 if (mysqli_query($conn, $sql)) {

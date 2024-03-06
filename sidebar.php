@@ -33,7 +33,7 @@
                 <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">ตรวจสอบข้อมูล</a>
                 <ul class="collapse list-unstyled" id="pageSubmenu2">
                     <li>
-                        <a href="#">รายชื่อสถานศึกษาที่ลงทะเบียนไม่ครบ</a>
+                        <a href="#">รายชื่อกิจกรรมที่ลงทะเบียนไม่ครบ</a>
                     </li>
                     <li>
                         <a href="#">ความครบถ้วนของจำนวนผู้แข่งขัน</a>
@@ -76,7 +76,7 @@
                 </li>
             <?php } else { ?>
                 <li class="mt-3">
-                    <a href="login-form.php?ref=<?php echo basename($_SERVER['REQUEST_URI']) ; ?>">เข้าสู่ระบบ</a>
+                    <a href="login-form.php?ref=<?php echo basename($_SERVER['REQUEST_URI']); ?>">เข้าสู่ระบบ</a>
                 </li>
             <?php } ?>
         </ul>

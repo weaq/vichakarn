@@ -134,7 +134,7 @@ $domain = '/';
             <div class="h5 font-weight-bold text-center mt-2">สถานศึกษาที่เป็นตัวแทน</div>
             <div class="form-group">
                 <label for="school_name" >ชื่อสถานศึกษา:</label>
-                <input type="text" class="form-control" id="school_name" name="school_name" required value="' . $school_name[0]['school_name'] . '">
+                <input type="text" class="form-control school-search-field" id="school_name" name="school_name" required value="' . $school_name[0]['school_name'] . '">
             </div>
 
 			<div class="h5 font-weight-bold text-center mt-2">ชื่อผู้แข่งขัน</div>
@@ -174,6 +174,25 @@ $domain = '/';
                             <input type="text" class="form-control" id="student_tel[' . $i . ']" name="student_tel[' . $i . ']" value="' . $student_reg_chk[$i]['tel'] . '" >
                         </div>
                 ';
+            } else {
+
+                $output .= '
+                    </div>
+                    <div class="row">
+                    <div class="mt-2 ' . $tmp_col . '">
+                        <label class="form-label">เลขบัตรประชาชน</label>
+                        <input type="text" class="form-control" id="student_cid[' . $i . ']" name="student_cid[' . $i . ']" value="' . $student_reg_chk[$i]['student_cid'] . '" >
+                    </div>
+                    <div class="mt-2 ' . $tmp_col . '">
+                        <label class="form-label">ชั้นเรียน</label>
+                        <input type="text" class="form-control" id="student_classroom[' . $i . ']" name="student_classroom[' . $i . ']" value="' . $student_reg_chk[$i]['student_classroom'] . '" >
+                    </div>
+                    <div class="mt-2 ' . $tmp_col . '">
+                        <label class="form-label">โรงเรียน</label>
+                        <input type="text" class="form-control school-search-field" id="student_schoolname[' . $i . ']" name="student_schoolname[' . $i . ']" value="' . $student_reg_chk[$i]['student_schoolname'] . '" >
+                    </div>
+            ';
+
             }
 
             $output .= '
@@ -280,11 +299,12 @@ $domain = '/';
 
 <script type="text/javascript">
         $(function() {
-            $("#school_name").autocomplete({
+            $(".school-search-field").autocomplete({
                 source: 'autocomplete-school-name.php',
             });
+
         });
-    </script>
+</script>
 
 <script>
     function js_remove_record() {
